@@ -1,5 +1,5 @@
 export default () => ({
-    port: process.env.PORT,
+    port: process.env.PORT || 9005,
     db: {
       uri: process.env.MONGO_URI || 'mongodb://localhost:27017/roameazy',
     },

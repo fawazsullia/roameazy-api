@@ -1,10 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 
-@Controller()
+@Controller('app')
 export class AppController {
-  constructor() {}
+  constructor() { }
 
-  @Get()
-  getHello(): string {
-    return 'Hello World!';}
+  @Get('live')
+  live(): boolean {
+    return true;
+  }
 }
