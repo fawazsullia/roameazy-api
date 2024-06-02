@@ -6,6 +6,10 @@ export class Listing {
     @Prop()
     title: string;
 
+    // a listing will not be shown if not verified
+    @Prop({ type: Boolean, default: false, required: true })
+    isVerified: boolean;
+
 
 }
 

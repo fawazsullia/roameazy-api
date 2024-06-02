@@ -10,7 +10,7 @@ export class UserController {
   @Inject()
   private userService: UserService;
 
-  // this api is to create a new admin user
+  // this api is to onboard a user and company
   @Post('onboard')
   @UseInterceptors(FileInterceptor('license'))
   async create(
@@ -19,5 +19,4 @@ export class UserController {
   ) {
     return this.userService.create(body, license);
   }
-  
 }
