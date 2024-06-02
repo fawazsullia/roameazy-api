@@ -1,5 +1,6 @@
-import { Body, Controller, Inject, Post } from "@nestjs/common";
-import { CreateUserRequest } from "src/models";
+import { Body, Controller, Inject, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { OnboardUserRequest } from "src/models";
 import { UserService } from "src/services";
 
 @Controller('user')
@@ -10,10 +11,13 @@ export class UserController {
   private userService: UserService;
 
   // this api is to create a new admin user
-  @Post('create/admin')
+  @Post('onboard')
+  @UseInterceptors(FileInterceptor('license'))
   async create(
-    @Body() body: CreateUserRequest
+    @Body() body: OnboardUserRequest,
+    @UploadedFile() license: Express.Multer.File
   ) {
-    return this.userService.create(body);
+    return this.userService.create(body, license);
   }
+  
 }

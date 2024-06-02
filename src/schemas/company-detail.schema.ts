@@ -28,7 +28,7 @@ export class CompanyDetail {
     alternatePhone?: string;
 
     @Prop({ required: true, type: mongoose.Types.ObjectId })
-    companyId: string;
+    companyId: mongoose.Types.ObjectId;
 
     @Prop({ required: true })
     createdAt: Date;

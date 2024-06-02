@@ -1,1 +1,1 @@
-export * from './create-user.request.model'
+export * from './onboard-user.request.model'
