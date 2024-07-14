@@ -4,6 +4,9 @@ import mongoose from "mongoose";
 @Schema()
 export class Place {
 
+    @Prop({ type: String, required: true, unique: true })
+    placeId: string;
+
     @Prop()
     name: string;
 
