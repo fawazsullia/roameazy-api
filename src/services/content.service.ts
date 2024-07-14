@@ -12,13 +12,17 @@ export class ContentService {
 
     public async create(body: CreateContentRequest) {
         const { key, group, data } = body;
+        const existingContent = await this.contentModel.findOne({ key, group });
+        if (existingContent) {
+            throw new Error('Content already exists');
+        }
         const content = new Content();
         content.key = key;
         content.group = group;
         content.data = data;
         content.createdAt = new Date();
         content.updatedAt = new Date();
-        await this.contentModel.create(content);
+        return this.contentModel.create(content);
     }
 
     // here, make provisions to only update single keys later
@@ -30,7 +34,7 @@ export class ContentService {
         }
         content.data = data;
         content.updatedAt = new Date();
-        await content.save();
+        return content.save();
     }
 
     public async get(params: GetContentRequest) {

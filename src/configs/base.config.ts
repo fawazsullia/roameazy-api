@@ -11,4 +11,5 @@ export default () => ({
     allowedOrigins: process.env.ALLOWED_ORIGINS
       ? process.env.ALLOWED_ORIGINS.split(',')
       : ['localhost:3000', 'http://localhost:3000', 'localhost'],
+    STATIC_GEN_AUTH_TOKEN: process.env.STATIC_GEN_AUTH_TOKEN,
   });
