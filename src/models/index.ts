@@ -5,3 +5,5 @@ export * from './get-content.request.model';
 export * from './create-place.request.model';
 export * from './success.response.model';
 export * from './get-departing-places.request.model';
+export * from './create-listing.request.model';
+export * from './get-listing.request.model';

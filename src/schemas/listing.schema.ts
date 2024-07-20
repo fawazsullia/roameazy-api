@@ -49,7 +49,23 @@ export class Listing {
     @Prop({ type: mongoose.Types.Array, required: false })
     tags?: string[];
 
+    @Prop({ type: Date, required: true })
+    startDate: Date;
 
+    @Prop({ type: Date, required: true })
+    endDate: Date;
+
+    @Prop({ type: Date, default: Date.now })
+    createdAt: Date;
+
+    @Prop({ type: Date, default: Date.now })
+    updatedAt: Date;
+
+    @Prop({ type: Boolean, default: true })
+    isActive: boolean;
+
+    @Prop({ type: Boolean, default: false })
+    isFeatured: boolean;
 }
 
 export const ListingSchema = SchemaFactory.createForClass(Listing);
