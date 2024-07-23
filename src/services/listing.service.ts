@@ -11,7 +11,7 @@ export class ListingService {
     private listingModel: Model<Listing>;
 
     async create(params: CreateListingRequest) {
-        const { title, from, to, includedPlaces, numberOfNights, mealsIncluded, travelInsurance, visaFee, hotels, airPortTransfers, itinerary, tags } = params;
+        const { title, from, to, includedPlaces, numberOfNights, mealsIncluded, travelInsurance, visaFee, hotels, airPortTransfers, itinerary, tags, startDate, endDate } = params;
 
         // create the listing here
         const existingListing = await this.listingModel.findOne({ title });
@@ -26,6 +26,8 @@ export class ListingService {
         newListing.numberOfNights = numberOfNights;
         newListing.mealsIncluded = mealsIncluded;
         newListing.travelInsurance = travelInsurance;
+        newListing.startDate = new Date(startDate);
+        newListing.endDate = new Date(endDate);
         if (visaFee) {
             newListing.visaFee = visaFee;
         }
@@ -70,18 +72,35 @@ export class ListingService {
             const regex = new RegExp(to, 'i');
             query['to'] = regex;
         }
-        if (listingType) {
-            if (listingType === 'active') {
-                query.isActive = true;
-            }
-            if (listingType === 'inactive') {
-                query.isActive = false;
-            }
+        query.isActive = true;
+        if(listingType === 'inactive'){
+            query.isActive = false;
+        }
+        if(listingType === 'all'){
+            delete query.isActive;
         }
         if (isFeatured) {
             query.isFeatured = isFeatured;
         }
 
-        return this.listingModel.find(query).limit(limit).skip(offset);
+        const listings = await this.listingModel.find(query).limit(limit).skip(offset);
+        return this.calculatePricing(listings, new Date(startDate), new Date(endDate));
+
+    }
+
+    public calculatePricing(listings: Listing[], startDate: Date, endDate: Date) {
+        listings.forEach(listing => { 
+            const daysForStartFromToday = startDate.getTime() - new Date().getTime();
+            const days = Math.floor(daysForStartFromToday / (1000 * 60 * 60 * 24));
+            let price = listing.basePrice;
+            let variablePriceTotal = 0;
+            listing.variablePrices.forEach(variablePrice => {
+                if (days >= variablePrice.window) {
+                    variablePriceTotal = variablePrice.price;
+                }
+            });
+            price += variablePriceTotal;
+            listing.price = price;
+        });
     }
 }

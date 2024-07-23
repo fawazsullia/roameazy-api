@@ -13,12 +13,13 @@ export class PlaceService {
     async create(params: CreatePlaceRequest) {
 
         console.log(params);
-        const existingPlace = await this.placeModel.findOne({ name: params.name });
+        const existingPlace = await this.placeModel.findOne({ placeId: params.placeId });
         if(existingPlace) {
             throw new Error('Place already exists');
         }
         const newPlace = new Place();
         newPlace.name = params.name;
+        newPlace.placeId = params.placeId;
         if(params.description) {
             newPlace.description = params.description;
         }

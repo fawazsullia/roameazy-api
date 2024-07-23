@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose from "mongoose";
 import { AirportTransfer, Meals } from "src/enums";
-import { Itinerary, ListingHotel } from "src/types";
+import { Itinerary, ListingHotel, VariablePrice } from "src/types";
 
 @Schema()
 export class Listing {
@@ -38,7 +38,7 @@ export class Listing {
     @Prop({ type: mongoose.Types.Array, required: false })
     hotels?: ListingHotel[];
 
-    @Prop({ type: AirportTransfer, required: false })
+    @Prop({ type: String, required: false })
     airPortTransfers?: AirportTransfer;
 
     // included ends here
@@ -66,6 +66,15 @@ export class Listing {
 
     @Prop({ type: Boolean, default: false })
     isFeatured: boolean;
+
+    @Prop({ type: Number, required: true })
+    basePrice: number;
+
+    @Prop({ type: mongoose.Types.Array, required: true })
+    variablePrices: VariablePrice[];
+
+    @Prop({ type: Number, default: 0 })
+    price: number; // this is the total price including variable prices
 }
 
 export const ListingSchema = SchemaFactory.createForClass(Listing);

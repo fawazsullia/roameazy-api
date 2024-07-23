@@ -27,5 +27,8 @@ export class CreatePlaceRequest {
     @IsBoolean()
     @IsOptional()
     isDestination?: boolean;
+
+    @IsString()
+    placeId: string;
     
 }

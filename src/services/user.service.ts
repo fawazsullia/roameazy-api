@@ -10,6 +10,8 @@ import { InjectConnection } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import * as crypto from 'crypto';
 import { UploadUtils } from "src/utils/upload.util";
+import { CreateSuperAdminRequest } from "src/models/user/create-super-admin.request.model";
+import { SuperAdminUser } from "src/schemas/super-admin-user.schema";
 
 @Injectable()
 export class UserService {
@@ -25,6 +27,9 @@ export class UserService {
 
   @InjectConnection()
   private readonly connection: mongoose.Connection
+
+  @InjectModel(SuperAdminUser.name)
+  private readonly superAdminUserModel: Model<SuperAdminUser>;
 
 
 
@@ -87,5 +92,25 @@ export class UserService {
     } finally {
       transactionSession.endSession();
     }
+  }
+
+  async createSuperAdmin(params: CreateSuperAdminRequest) {
+    const { username, email, password, confirmPassword, role } = params;
+    const existing = await this.superAdminUserModel.findOne({ $or: [{ username }, { email }] });
+    if (existing) {
+      throw new Error('User already exists');
+    }
+    if (password !== confirmPassword) {
+      throw new Error('Password does not match');
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const superAdminUser = new SuperAdminUser();
+    superAdminUser.username = username;
+    superAdminUser.email = email;
+    superAdminUser.password = hashedPassword;
+    superAdminUser.role = role;
+    superAdminUser.createdAt = new Date();
+    superAdminUser.updatedAt = new Date();
+    await this.superAdminUserModel.create(superAdminUser);
   }
 }
