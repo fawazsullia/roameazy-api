@@ -70,7 +70,7 @@ export class Listing {
     @Prop({ type: Number, required: true })
     basePrice: number;
 
-    @Prop({ type: mongoose.Types.Array, required: true })
+    @Prop({ type: mongoose.Types.Array, default: [] })
     variablePrices: VariablePrice[];
 
     @Prop({ type: Number, default: 0 })

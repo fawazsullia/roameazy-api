@@ -1,6 +1,6 @@
 import { IsBoolean, IsEnum, IsNumber, IsObject, IsOptional, IsString } from "class-validator";
 import { AirportTransfer, Meals } from "src/enums";
-import { Itinerary, ListingHotel } from "src/types";
+import { Itinerary, ListingHotel, VariablePrice } from "src/types";
 
 export class CreateListingRequest {
     @IsString()
@@ -47,4 +47,12 @@ export class CreateListingRequest {
 
     @IsString()
     endDate: string;
+
+    @IsNumber()
+    basePrice: number;
+
+    @IsObject({ each: true })
+    @IsOptional()
+    variablePrices?: VariablePrice[];
+
 }
