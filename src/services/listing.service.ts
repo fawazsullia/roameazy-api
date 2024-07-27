@@ -4,6 +4,8 @@ import { FilterQuery, Model, PipelineStage } from "mongoose";
 import { CreateListingRequest, GetListingRequest } from "src/models";
 import { Listing } from "src/schemas/listing.schema";
 
+import { v4 as uuidV4 } from "uuid"
+
 @Injectable()
 export class ListingService {
 
@@ -11,7 +13,7 @@ export class ListingService {
   private listingModel: Model<Listing>;
 
   async create(params: CreateListingRequest) {
-    const { title, from, to, includedPlaces, numberOfNights, mealsIncluded, travelInsurance, visaFee, hotels, airPortTransfers, itinerary, tags, startDate, endDate, basePrice, variablePrices } = params;
+    const { title, from, to, includedPlaces, numberOfNights, mealsIncluded, travelInsurance, visa, hotels, airPortTransfers, itinerary, tags, startDate, endDate, basePrice, variablePrices, airTickets, tourGuide} = params;
 
     // create the listing here
     const existingListing = await this.listingModel.findOne({ title });
@@ -28,8 +30,9 @@ export class ListingService {
     newListing.travelInsurance = travelInsurance;
     newListing.startDate = new Date(startDate);
     newListing.endDate = new Date(endDate);
-    if (visaFee) {
-      newListing.visaFee = visaFee;
+    newListing.listingId = uuidV4();
+    if (visa) {
+      newListing.visa = visa;
     }
     if (hotels) {
       newListing.hotels = hotels;
@@ -46,6 +49,12 @@ export class ListingService {
     newListing.basePrice = basePrice;
     if (variablePrices) {
       newListing.variablePrices = variablePrices;
+    }
+    if(airTickets){
+      newListing.airTickets = airTickets;
+    }
+    if(tourGuide){
+      newListing.tourGuide = tourGuide;
     }
     await this.listingModel.create(newListing);
   }
@@ -197,7 +206,6 @@ export class ListingService {
       if (maxNights !== undefined) matchStage.numberOfNights.$lte = maxNights;
       if (minNights !== undefined) matchStage.numberOfNights.$gte = minNights;
     }
-
     const pipeline: PipelineStage[] = [
       { $match: matchStage },
     ];
@@ -271,5 +279,11 @@ export class ListingService {
       listings: results,
       total: totalCount[0]?.total || 0
     };
+  }
+
+  public async getListingById (listingId) {
+    return this.listingModel.findOne({
+      listingId
+    })
   }
 }

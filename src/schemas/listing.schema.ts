@@ -6,6 +6,9 @@ import { Itinerary, ListingHotel, VariablePrice } from "src/types";
 @Schema()
 export class Listing {
 
+    @Prop({ type: String, required: true })
+    listingId: string
+
     @Prop()
     title: string;
 
@@ -32,11 +35,17 @@ export class Listing {
     @Prop({ type: Boolean, default: false, required: true })
     travelInsurance: boolean;
 
-    @Prop({ type: Number, required: false })
-    visaFee?: number;
+    @Prop({ type: Boolean, required: false })
+    visa?: boolean;
 
     @Prop({ type: mongoose.Types.Array, required: false })
     hotels?: ListingHotel[];
+
+    @Prop({ type: Boolean, required: false, default: false })
+    airTickets: boolean;
+
+    @Prop({ type: Boolean, required: false, default: false })
+    tourGuide: boolean;
 
     @Prop({ type: String, required: false })
     airPortTransfers?: AirportTransfer;

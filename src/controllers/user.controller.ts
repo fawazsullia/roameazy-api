@@ -1,6 +1,6 @@
 import { Body, Controller, Inject, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { OnboardUserRequest } from "src/models";
+import { OnboardUserRequest, SuccessReponse } from "src/models";
 import { CreateSuperAdminRequest } from "src/models/user/create-super-admin.request.model";
 import { UserService } from "src/services";
 
@@ -18,7 +18,8 @@ export class UserController {
     @Body() body: OnboardUserRequest,
     @UploadedFile() license: Express.Multer.File
   ) {
-    return this.userService.create(body, license);
+    await this.userService.create(body, license);
+    return new SuccessReponse()
   }
 
   @Post('super-admin')

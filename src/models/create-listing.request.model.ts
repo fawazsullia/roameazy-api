@@ -24,9 +24,9 @@ export class CreateListingRequest {
     @IsBoolean()
     travelInsurance: boolean;
 
-    @IsNumber()
+    @IsBoolean()
     @IsOptional()
-    visaFee?: number;
+    visa?: boolean;
 
     @IsOptional()
     @IsObject({ each: true })
@@ -54,5 +54,13 @@ export class CreateListingRequest {
     @IsObject({ each: true })
     @IsOptional()
     variablePrices?: VariablePrice[];
+
+    @IsBoolean()
+    @IsOptional()
+    airTickets?: boolean;
+
+    @IsBoolean()
+    @IsOptional()
+    tourGuide?: boolean;
 
 }

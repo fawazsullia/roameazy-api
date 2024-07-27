@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, Query } from "@nestjs/common";
 import { CreateListingRequest, GetListingRequest, SuccessReponse } from "src/models";
 import { ListingService } from "src/services";
 
@@ -16,11 +16,18 @@ export class ListingController {
         return new SuccessReponse();
     }
 
-    @Post()
+    @Post('get-listings')
     async getListings(
 
         @Body() body: GetListingRequest
     ) {
         return this.listingService.get(body);
+    }
+
+    @Get(':listingId')
+    async getListingById(
+        @Param('listingId') listingId: string
+    ) {
+        return this.listingService.getListingById(listingId);
     }
 }

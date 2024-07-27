@@ -1,7 +1,7 @@
 export default () => ({
     port: process.env.PORT || 9005,
     db: {
-      uri: process.env.MONGO_URI || 'mongodb://localhost:27017/roameazy',
+      uri: process.env.MONGO_URI || '',
     },
     jwtSecret: process.env.JWT_SECRET,
     saltRounds: process.env.SALT_ROUNDS ? Number(process.env.SALT_ROUNDS) : 10,
