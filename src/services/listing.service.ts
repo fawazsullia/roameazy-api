@@ -1,7 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { parsePhoneNumber } from "awesome-phonenumber";
 import { FilterQuery, Model, PipelineStage } from "mongoose";
-import { CreateListingRequest, GetListingRequest } from "src/models";
+import { CreateListingRequest, GetListingRequest, SubmitEnquiryRequest } from "src/models";
+import { Customer } from "src/schemas/customer.schema";
+import { Enquiry, EnquirySchema } from "src/schemas/enquiry.schema";
 import { Listing } from "src/schemas/listing.schema";
 
 import { v4 as uuidV4 } from "uuid"
@@ -11,6 +14,12 @@ export class ListingService {
 
   @InjectModel(Listing.name)
   private listingModel: Model<Listing>;
+
+  @InjectModel(Enquiry.name)
+  private enquiryModel: Model<Enquiry>;
+
+  @InjectModel(Customer.name)
+  private customerModel: Model<Customer>;
 
   async create(params: CreateListingRequest) {
     const { title, from, to, includedPlaces, numberOfNights, mealsIncluded, travelInsurance, visa, hotels, airPortTransfers, itinerary, tags, startDate, endDate, basePrice, variablePrices, airTickets, tourGuide} = params;
@@ -285,5 +294,33 @@ export class ListingService {
     return this.listingModel.findOne({
       listingId
     })
+  }
+
+  public async submitEnquiry (body: SubmitEnquiryRequest) {
+    const { listingId, companyId, source, phoneNumber } = body;
+    const pn = parsePhoneNumber(phoneNumber);
+    if (!pn.valid) {
+      throw new Error('Invalid phone number');
+    }
+    const existingCustomer = await this.customerModel.findOne({ phoneNumber });
+    let customerId;
+    if (existingCustomer) {
+      customerId = existingCustomer._id;
+    } else {
+      const customer = new Customer();
+      customer.phoneNumber = phoneNumber;
+      customer.createdAt = new Date();
+      const createdCustomer = await this.customerModel.create(customer);
+      customerId = createdCustomer._id;
+    }
+    const enquiry = new Enquiry();
+    enquiry.listingId = listingId;
+    enquiry.companyId = companyId;
+    enquiry.source = source;
+    enquiry.customerId = customerId;
+    enquiry.createdAt = new Date();
+    await this.enquiryModel.create(enquiry);
+
+    // after enquiry created, send message to the company. This is via whatsapp
   }
 }

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Inject, Param, Post, Query } from "@nestjs/common";
-import { CreateListingRequest, GetListingRequest, SuccessReponse } from "src/models";
+import { CreateListingRequest, GetListingRequest, SubmitEnquiryRequest, SuccessReponse } from "src/models";
 import { ListingService } from "src/services";
 
 @Controller('listing')
@@ -29,5 +29,13 @@ export class ListingController {
         @Param('listingId') listingId: string
     ) {
         return this.listingService.getListingById(listingId);
+    }
+
+    @Post('submit-enquiry')
+    async createEnquiry(
+        @Body() body: SubmitEnquiryRequest
+    ) {
+        await this.listingService.submitEnquiry(body);
+        return new SuccessReponse();
     }
 }

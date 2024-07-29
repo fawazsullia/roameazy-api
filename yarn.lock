@@ -1528,6 +1528,11 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
+awesome-phonenumber@^6.10.0:
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/awesome-phonenumber/-/awesome-phonenumber-6.10.0.tgz#7a3d85d14afa3f98c17f893fa2af29ab9b332d22"
+  integrity sha512-nLzMoIWl7cP/1xL7ErlT3+zoGu9S/nbdZ89HdLwiW75U4tV26vaDkFQiz6QdIm5SWRY+BmI5LN9+HiiqFHHq8Q==
+
 babel-jest@^29.7.0:
   version "29.7.0"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-29.7.0.tgz#f4369919225b684c56085998ac63dbd05be020d5"

@@ -1,6 +1,7 @@
 import { CompanyDetailSchema } from './company-detail.schema';
 import { CompanySchema } from './company.schema';
 import { ContentSchema } from './content.schema';
+import { Customer, CustomerSchema } from './customer.schema';
 import { EnquirySchema } from './enquiry.schema';
 import { ListingSchema } from './listing.schema';
 import { placeSchema } from './places.schema';
@@ -16,5 +17,6 @@ export default () => [
   { name: 'Place', schema: placeSchema },
   { name: 'SuperAdminUser', schema: SuperAdminUserSchema },
   { name: 'Listing', schema: ListingSchema },
-  {name: 'Enquiry', schema: EnquirySchema }
+  {name: 'Enquiry', schema: EnquirySchema },
+  { name: 'Customer', schema: CustomerSchema },
 ];
